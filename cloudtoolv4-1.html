@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<TITLE> CLoud Tool </TITLE>
+<style>
+canvas#mycanvas {border: solid gray 1px}
+<!--
+#myProgress {
+  position: relative;
+  width: 10%;
+  height: 10px;
+  background-color: #ddd;
+}
+#myBar {
+  position: absolute;
+  width: 1%;
+  height: 100%;
+  background-color: #4CAF50;
+}
+-->
+</style>
+</HEAD>
+<BODY>
+<CENTER>
+<H1> Cloud Tool </H1>
+<?php
+	$wanedge[0] = "1000";
+	$wanedge[1] = "15";
+	for ($index = 0; $index < count($wanedge); $index++) {
+		echo $wanedge[$index], "\n";	
+	}
+?>
+
+<!http://www.javascript-coder.com/files/get-all-form-objects/javascript-forms-example-3.html#
+
+<form name="cashflow">
+<fieldset><legend>cloud tool</legend>
+
+</form>
+
+<form name ="iaas">
+
+<fieldset><legend>capex, revenue and Cisco capital</legend>
+
+<!--
+<button onclick="addTen()">Move Progress bar</button>
+<br>
+<script>
+function addTenPercent() {
+    var bar = document.getElementById("haasprogress");
+    setInterval(addTenPercent, 100);
+    bar.value += 10;
+}
+</script>
+<script>
+function addTen() {
+    var bar = document.getElementById("haasprogress");
+    var max = document.getElementById("percentage");
+    if (bar.value < max) { // this is the max value of the bar and the # of iterations
+        setTimeout(addTen, 80); // this literal value controls the speed
+        bar.value += 10;    
+    }else{  
+        return;
+    } 
+}
+</script>
+-->
+
+<!-- This is my example for Annuity Calcualation
+<input type="button" value="Calculate Annuity" onclick="calculateAnnuity();">
+<br>
+
+<script>
+function calculateAnnuity() {
+    principal = document.getElementById("totalcapex").value;
+    var interest = document.getElementById("interest").value / 100 / 12;
+    var payments = document.getElementById("years").value * 12;
+    var x = Math.pow(1 + interest, payments);
+    var monthly = (principal*x*interest)/(x-1);
+    var a = monthly;
+    document.getElementById("annuity").value = a;
+}
+</script>
+-->
+
+<!-- This is online example for Annuity Calculation
+<br>
+  <table>
+    <tr><td colspan="3"><b>Enter Loan Information:</b></td></tr>
+    <tr>
+      <td>1)</td>
+      <td>Amount of the loan (any currency):</td>
+      <td><input type="text" id="principal" size="6" 
+                 onchange="calculate();"></td>
+    </tr>
+    <tr>
+      <td>2)</td>
+      <td>Annual percentage rate of interest:</td>
+      <td><input type="text" id="interest" size="6" value="2" 
+                 onchange="calculate();"></td>
+    </tr>
+    <tr>
+      <td>3)</td>
+      <td>Repayment period in years:</td>
+      <td><input type="text" id ="years" size="6" value="2" 
+                 onchange="calculate();"></td>
+    </tr>
+    <tr><td colspan="3">
+      <input type="button" value="Compute" onclick="calculate();">
+    </td></tr>
+    <tr><td colspan="3">
+      <b>Payment Information:</b>
+    </td></tr>
+    <tr>
+      <td>4)</td>
+      <td>Your One Time payment will be:</td>
+      <td><input type="text" id="onetime" size="6"></td>
+    </tr>
+    <tr>
+      <td>5)</td>
+      <td>Your monthly payment will be:</td>
+      <td><input type="text" id ="payment" size="6"></td>
+    </tr>
+    <tr>
+      <td>6)</td>
+      <td>Your total payment will be:</td>
+      <td><input type="text" id="total" size="6"></td>
+    </tr>
+    <tr>
+      <td>7)</td>
+      <td>Your total interest payments will be:</td>
+      <td><input type="text" id ="totalinterest" size="6"></td>
+    </tr>
+  </table>
+
+<!--
+  This is the JavaScript program that makes the example work. Note that
+  this script defines the calculate() function called by the event
+  handlers in the form. The function refers to values in the form
+  fields using the names defined in the HTML code above.
+-->
+
+<script language="JavaScript">
+function calculate() {
+    // Get the user's input from the form. Assume it is all valid.
+    // Convert interest from a percentage to a decimal, and convert from
+    // an annual rate to a monthly rate. Convert payment period in years
+    // to the number of monthly payments.
+    var principal = document.iaas.principal.value;
+//    principal = document.getElementById("totalcapex").value;
+    var interest = document.iaas.interest.value / 100 / 12;
+    var payments = document.iaas.years.value * 12;
+
+    // Now compute the monthly payment figure, using esoteric math.
+    var x = Math.pow(1 + interest, payments);
+    var monthly = (principal*x*interest)/(x-1);
+
+    // Check that the result is a finite number. If so, display the results.
+    if (!isNaN(monthly) && 
+        (monthly != Number.POSITIVE_INFINITY) &&
+        (monthly != Number.NEGATIVE_INFINITY)) {
+
+        document.iaas.principal.value = round(principal);
+        document.iaas.payment.value = round(monthly);
+        document.iaas.total.value = round(monthly * payments);
+        document.iaas.totalinterest.value = 
+            round((monthly * payments) - principal);
+    }
+    // Otherwise, the user's input was probably invalid, so don't
+    // display anything.
+    else {
+        document.iaas.payment.value = "";
+        document.iaas.payment.value = "";
+        document.iaas.total.value = "";
+        document.iaas.totalinterest.value = "";
+    }
+}
+
+// This simple method rounds a number to two decimal places.
+function round(x) {
+  return Math.round(x*100)/100;
+}
+</script>
+
+<script>
+
+function presentValue(fv,freq,rate,periods)
+{return(fv/Math.pow((1+(rate/100/freq)),periods));}
+function futureValue(pv,freq,rate,periods)
+{return(pv*Math.pow(1+(rate/100/freq),periods));}
+function annualizedReturn(fv,pv,years)
+{return(fv- pv)/ pv / years;
+}
+function monthlyPayment(pv,freq,rate,periods)
+{rate=rate/100/freq;var x=Math.pow(1+ rate,periods);return(pv*x*rate)/ (x - 1);
+}
+function annuity(fv,freq,rate,periods)
+{rate=rate/100/freq;return(fv/((Math.pow(1+ rate,periods)- 1))*rate);}
+function calcAmortPrincipal(pymt,freq,rate,periods)
+{rate=rate/100/freq;return(pymt*(1-(1/Math.pow(1+ rate,periods)))/ rate);
+}
+function toCurrency(num){num=Math.round(num*100)/100;
+var currstring=num.toString();if(currstring.match(/\./)){var curr=currstring.split('.');}else{var curr=[currstring,"00"];}
+curr[1]+="00";curr[2]="";var returnval="";var length=curr[0].length;for(var i=0;i<2;i++)
+curr[2]+=curr[1].substr(i,1);for(i=length;(i- 3)>0;i=i- 3){returnval=","+ curr[0].substr(i- 3,3)+ returnval;}
+returnval=curr[0].substr(0,i)+ returnval+"."+ curr[2];return(returnval);}
+function regularDeposit(payment,freq,rate,periods)
+{rate=rate/100/freq;return(payment*(Math.pow(1+ rate,periods)- 1)/ rate * (1 + rate));
+}
+</script>
+
+<table>
+<td>
+<table><td><fieldset><legend>capex and revenue</legend>
+<table>
+<tr>
+<td>
+<label for="Ultra">Select Years:
+<select id="Ultra" onchange="run()">  <!--http://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript-->
+     <option value="1">1</option>
+     <option value="2">2</option>
+     <option value="3">3</option>
+     <option value="4">4</option>     
+     <option value="5">5</option>     
+     <option value="6">6</option>     
+</select>
+</label>
+</td>
+</tr>
+<tr>
+<td>
+<label>Total Cost:<input type="text" id="totalcapex" style="width: 4em"></label>
+</td>
+<td>
+<meter id="totalcapexprogress" value="0" max ="100"></meter>
+</td>
+</tr>
+<tr>
+<td>
+<label>Total Revenue:<input type="text" id="totalrevenue" style="width: 4em"></label>
+</td>
+<td>
+<meter id="totalrevenueprogress" value="0" max ="100"></meter>
+</td>
+</tr>
+<tr>
+<td>
+<label>Revenue - Cost :<input type="text" id="cashflow" style="width: 4em"></label>
+</td>
+<td>
+<meter id="totalcapex-revenueprogress" value="0" max ="100"></meter>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<!--
+<canvas id="myCanvasGraph" width="578" height="200" style="border:1px dashed #CCC;"></canvas>
+-->
+<canvas id="can" width="400" height="200" style="border:1px dashed #CCC;"></canvas>
+</td>
+</tr>
+</table>
+</fieldset></td></table>
+</td>
+<td>
+<table><td><fieldset><legend>Cisco Capital</legend>
+<table>
+<tr>
+<td>
+<label>Annual Interest: <input type="text" id="annualinterest" value="2" style="width: 4em" onchange="run();"></label>
+</td>
+</tr>
+<tr>
+<td>
+<label>Loan Period in years: <input type="text" id="loanperiodinyears" value="2" style="width: 4em" onchange="run();"></label>
+</td>
+</tr>
+<tr>
+<td>
+<label>annuity: <input type="text" id="annuity" style="width: 4em"></label>
+</td>
+</tr>
+<tr>
+<td>
+<label>Payment with interest: <input type="text" id="paymentwithinterest" style="width: 4em"></label>
+</td>
+</tr>
+<tr>
+<td>
+<label>Total Interest: <input type="text" id="interestpayed" style="width: 4em"></label>
+</td>
+</tr>
+</table>
+</fieldset></td></table>
+</td>
+<td>
+<table>
+<td>
+<fieldset><legend>revenue</legend>
+<table>
+<tr>
+<td>
+<label>Iaas revenue :<input type="number" id="iaasrevenue" style="width: 4em"></label>
+</td>
+<td>
+<meter id="iaasprogress" value="0" max ="100"></meter>
+</td>
+<td>
+<canvas id="mycanvas1" width="70" height="70" style="border:1px dashed #CCC;"></canvas>
+</td>
+</tr>
+<tr>
+<td>
+<label>DRaaS revenue:<input type="number" id="draasrevenue" style="width: 4em"></label>
+</td>
+<td>
+<meter id="draasprogress" value="0" max ="100"></meter>
+</td>
+<td>
+<canvas id="mycanvas2" width="70" height="70" style="border:1px dashed #CCC;"></canvas>
+</td>
+</tr>
+<tr>
+<td>
+<label>HaaS revenue:<input type="number" id="haasrevenue" style="width: 4em"></label>
+</td>
+<td>
+<meter id="haasprogress" value="0" max ="100"></meter>
+</td>
+<td>
+<canvas id="mycanvas3" width="70" height="70" style="border:1px dashed #CCC;"></canvas>
+</td>
+</tr>
+</table>
+</fieldset>
+</td>
+</table>
+</td>
+</table>
+</fieldset>
+
+<script>
+
+function run() {
+
+//calculate iaas, draas, haas and total revenue    
+document.getElementById("iaasrevenue").value = document.getElementById("Ultra").value*(document.getElementById("smallprice").value*document.getElementById("smallquantity").value+document.getElementById("mediumprice").value*document.getElementById("mediumquantity").value+document.getElementById("largeprice").value*document.getElementById("largequantity").value);
+document.getElementById("draasrevenue").value = document.getElementById("Ultra").value*(document.getElementById("draassmallprice").value*document.getElementById("draassmallquantity").value+document.getElementById("draasmediumprice").value*document.getElementById("draasmediumquantity").value+document.getElementById("draaslargeprice").value*document.getElementById("draaslargequantity").value);
+document.getElementById("haasrevenue").value = document.getElementById("Ultra").value*(document.getElementById("haassmallprice").value*document.getElementById("haassmallquantity").value+document.getElementById("haasmediumprice").value*document.getElementById("haasmediumquantity").value+document.getElementById("haaslargeprice").value*document.getElementById("haaslargequantity").value);
+
+//calculate capex, revenue and cashflow
+document.getElementById("totalcapex").value = series1total.valueAsNumber+series2total.valueAsNumber+series3total.valueAsNumber+series4total.valueAsNumber+series5total.valueAsNumber+series6total.valueAsNumber+series7total.valueAsNumber+series8total.valueAsNumber+series9total.valueAsNumber+series10total.valueAsNumber;
+//calculate cashflow as revenue - capex
+document.getElementById("totalrevenue").value= iaasrevenue.valueAsNumber+draasrevenue.valueAsNumber+haasrevenue.valueAsNumber;
+document.getElementById("cashflow").value= document.getElementById("totalrevenue").value-document.getElementById("totalcapex").value;
+
+//iaas, draas and haas percentage compared to total revenue
+document.getElementById("iaasprogress").value= 100*document.getElementById("iaasrevenue").value/document.getElementById("totalrevenue").value;
+document.getElementById("draasprogress").value= 100*document.getElementById("draasrevenue").value/document.getElementById("totalrevenue").value;
+document.getElementById("haasprogress").value= 100*document.getElementById("haasrevenue").value/document.getElementById("totalrevenue").value;
+document.getElementById("totalcapexprogress").value= document.getElementById("totalcapex").value;
+document.getElementById("totalrevenueprogress").value= 100*document.getElementById("totalrevenue").value;
+document.getElementById("totalcapex-revenueprogress").value= 100*document.getElementById("cashflow").value;
+
+//calculation
+principal = document.getElementById("totalcapex").value;
+interest = document.getElementById("annualinterest").value / 100 / 12;
+payments = document.getElementById("loanperiodinyears").value * 12;
+x = Math.pow(1 + interest, payments);
+monthly = round((principal*x*interest)/(x-1));
+a = monthly;
+document.getElementById("annuity").value = a;
+document.getElementById("paymentwithinterest").value = round(monthly * payments);
+document.getElementById("interestpayed").value = round((monthly * payments) - principal);
+
+
+document.getElementById("iaassmallgrowthlabel").value = document.getElementById("iaassmallgrowth").value;
+
+//bar chart https://www.youtube.com/watch?v=_RISuMNWpKo
+
+
+var canvas = document.getElementById("can");
+var ctx = canvas.getContext("2d");
+
+var itemName=["Y1", "Y2", "Y3"];
+var scores = [(document.getElementById("totalrevenue").value-document.getElementById("totalcapex").value)/1000,((document.getElementById("totalrevenue").value)*1.20-document.getElementById("totalcapex").value)/1000 , ((document.getElementById("totalrevenue").value)*1.44-document.getElementById("totalcapex").value)/1000];
+
+for (var i=0; i< document.getElementById("Ultra").value;i++) {
+itemName[i] = i+1;
+scores[i]= ((document.getElementById("totalrevenue").value*(i+1)*(document.getElementById("iaassmallgrowth").value/100))-document.getElementById("totalcapex").value)/1000;
+}
+
+var width = 50;
+var currX = 50;
+var base = 200;
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = 'green';
+for (var i=0; i< scores.length;i++) {
+var h = scores[i];
+ctx.fillRect(currX,canvas.height - h,width,h);
+ctx.fillText(itemName[i],currX,canvas.height-(h*1.20));
+currX += width + 10;
+}
+
+//piechart http://jsfiddle.net/hvYkM/1/
+
+
+//var canvas = document.getElementById("can");
+//var ctx = canvas.getContext("2d");
+//var lastend = 0;
+//var data = [200,60,15];
+//var myTotal = 0;
+//var myColor = ['red','green','blue'];
+
+//for(var e = 0; e < data.length; e++)
+//{
+//  myTotal += data[e];
+//}
+
+//for (var i = 0; i < data.length; i++) {
+//ctx.fillStyle = myColor[i];
+//ctx.beginPath();
+//ctx.moveTo(canvas.width/2,canvas.height/2);
+//ctx.arc(canvas.width/2,canvas.height/2,canvas.height/2,lastend,lastend+(Math.PI*2*(data[i]/myTotal)),false);
+//ctx.lineTo(canvas.width/2,canvas.height/2);
+//ctx.fill();
+//}
+
+//chart for iaas
+var al1=0;
+var id1 = setInterval(frame1,10);
+function frame1() {
+var cnv1 = document.getElementById('mycanvas1');
+var ctx1 = cnv1.getContext('2d');
+var cw1 = ctx1.canvas.width;
+var ch1 = ctx1.canvas.height;
+var start1 = 4.72;
+diff1 = ((al1 / 100) * Math.PI*2*10).toFixed(2);
+ctx1.clearRect(0, 0, cw1, ch1);
+ctx1.lineWidth = 3;
+ctx1.fillStyle = '#09F';
+ctx1.strokeStyle = '#09F';
+ctx1.font="10px bebas"
+ctx1.textAlign = 'center';
+ctx1.fillText(al1.toFixed(2)+'%', cw1*.5, ch1*.5+2, cw1);
+ctx1.beginPath();
+ctx1.arc(cw1*.5,ch1*.5,30,start1,diff1/10+start1,false);
+ctx1.stroke();
+if (al1 >= document.getElementById("iaasprogress").value) {
+      clearInterval(id1);
+    } else {
+      al1++;
+    }
+}
+//chart for draas
+var al2=0;
+var id2 = setInterval(frame2,10);
+function frame2() {
+var cnv2 = document.getElementById('mycanvas2');
+var ctx2 = cnv2.getContext('2d');
+var cw2 = ctx2.canvas.width;
+var ch2 = ctx2.canvas.height;
+var start2 = 4.72;
+diff2 = ((al2 / 100) * Math.PI*2*10).toFixed(2);
+ctx2.clearRect(0, 0, cw2, ch2);
+ctx2.lineWidth = 3;
+ctx2.fillStyle = '#09F';
+ctx2.strokeStyle = '#09F';
+ctx2.font="10px bebas"
+ctx2.textAlign = 'center';
+ctx2.fillText(al2.toFixed(2)+'%', cw2*.5, ch2*.5+2, cw2);
+ctx2.beginPath();
+ctx2.arc(cw2*.5,ch2*.5,30,start2,diff2/10+start2,false);
+ctx2.stroke();
+if (al2 >= document.getElementById("draasprogress").value) {
+      clearInterval(id2);
+    } else {
+      al2++;
+    }
+}
+//chart for haas
+var al3=0;
+var id3 = setInterval(frame3,10);
+function frame3() {
+var cnv3 = document.getElementById('mycanvas3');
+var ctx3 = cnv3.getContext('2d');
+var cw3 = ctx3.canvas.width;
+var ch3 = ctx3.canvas.height;
+var start3 = 4.72;
+diff3 = ((al3 / 100) * Math.PI*2*10).toFixed(2);
+ctx3.clearRect(0, 0, cw3, ch3);
+ctx3.lineWidth = 3;
+ctx3.fillStyle = '#09F';
+ctx3.strokeStyle = '#09F';
+ctx3.font="10px bebas"
+ctx3.textAlign = 'center';
+ctx3.fillText(al3.toFixed(2)+'%', cw3*.5, ch3*.5+2, cw3);
+ctx3.beginPath();
+ctx3.arc(cw3*.5,ch3*.5,30,start3,diff3/10+start3,false);
+ctx3.stroke();
+if (al3 >= document.getElementById("haasprogress").value) {
+      clearInterval(id3);
+    } else {
+      al3++;
+    }
+}
+}
+</script>
+
+<fieldset><legend>Monthly recurring revenue : Infrastructure as a Service, Disaster recovery as a Service, SAP HANA as a Service</legend>
+<table>
+<td>
+	<fieldset><legend>IaaS</legend>
+		<table>
+		<tr>
+		<th>
+		<img src="bazinga.png" width="20" height="20">
+		</th>
+		<th>
+		<img src="bazinga.png" width="30" height="30">
+		</th>
+		<th>
+		<img src="bazinga.png" width="40" height="40">
+		</th>
+		</tr>
+		<tr>
+		<td>
+		<fieldset><legend>IaaS Small</legend>
+			<table>
+			<tr>
+			<td>
+			<label>ram:<input id="smallram" style="width: 4em" type = "number" min="2" max="1000" step="2" value ="4"></label>
+			</td>
+			<td>
+			<label>cpu:<input id="smallcpu" style="width: 4em" type = "number" min="1" max="4" step="1" value ="2"></label>
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label>price:<input id="smallprice" style="width: 4em" type = "number" min="1" max="1000" step="1" value ="20" onchange="run()"></label>
+			</td>
+			<td>
+			<label>quantity:<input id="smallquantity" style="width: 4em" type = "number" min="1" max="1000" step="1" value="5" onchange="run()"></label>
+			</td>
+			</tr>
+			<tr>
+			<td colspan="2">
+			<label>Growth: 0<input id="iaassmallgrowth" style="width: 6em" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"><output id="iaassmallgrowthlabel"></output>%</label>
+			</td>
+			</tr>
+			</table>
+		</fieldset>
+		</td>
+		<td>
+		<fieldset><legend>IaaS Medium</legend>
+			<table>
+			<tr>
+			<td>
+			<label>ram:<input id="mediumram" style="width: 4em" type = "number" min="2" max="1000" step="2" value ="16"></label>
+			</td>
+			<td>
+			<label>cpu:<input id="mediumcpu" style="width: 4em" type = "number" min="1" max="4" step="1" value ="2" ></label><br/>
+			</td>
+			</tr>
+			<td>
+			<label>price:<input id="mediumprice" style="width: 4em" type = "number" min="1" max="1000" step="1" value ="25" onchange="run()"></label>
+			</td>
+			<td>
+			<label>quantity:<input id="mediumquantity" style="width: 4em" type = "number" min="1" max="1000" step="1" value ="2" onchange="run()"></label>
+			</td>
+			</tr>
+                        <tr>
+                        <td colspan="2">
+                        <label>Growth:<input id="iaasmediumgrowth" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"></label>
+                        </td>
+			</tr>
+			</table>
+		</fieldset>
+		</td>
+		<td>
+		<fieldset><legend>IaaS Large</legend>
+			<table>
+			<tr>
+			<td>
+			<label>ram:<input id="largeram" style="width: 4em" type = "number" min="2" max="1000" step="2" value ="32"></label>
+			</td>
+			<td>
+			<label>cpu:<input id="largecpu" style="width: 4em" type = "number" min="1" max="4" step="1" value ="2"></label><br/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+			<label>price:<input id="largeprice" style="width: 4em" type = "number" min="1" max="1000" step="1" value ="30" onchange="run()"></label>
+			</td>
+			<td>
+			<label>quantity:<input id="largequantity" style="width: 4em" type = "number" min="1" max="1000" step="1" value ="3" onchange="run()"></label>
+			</td>
+			</tr>
+                        <tr>
+                        <td colspan="2">
+                        <label>Growth:<input id="iaaslargegrowth" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"></label>
+                        </td>
+			</tr>
+			</table>
+		</fieldset>
+		</td>
+		</tr>
+		</table>
+	</fieldset>
+</td>
+<td>
+	<fieldset><legend>DRaaS</legend>
+		<table>
+                <tr>
+                <th>
+		<img src="batman.png" width="20" height="20">
+                </th>
+		<th>
+		<img src="batman.png" width="30" height="30">
+		</th>
+		<th>
+		<img src="batman.png" width="40" height="40">
+                </th>	
+		</tr>
+                <tr>		
+		<td>
+		<fieldset><legend>DraaS Small</legend>
+			<table>
+			<tr>
+			<td>
+			<label>price:<input id="draassmallprice" style="width: 4em" type = "number" min="0" max="1000" step="1" value="143"i onchange="run()"></label>
+			</td>
+			<td>	
+			<label>quantity:<input id="draassmallquantity" style="width: 4em" type = "number" min="0" max="1000" step="1" value ="3" onchange="run()"></label>
+			</td>
+			</tr>
+                        <tr>
+                        <td colspan="2">
+                        <label>Growth: 0<input id="draassmallgrowth" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"></label>
+                        </td>
+			</tr>
+			</table>
+		</fieldset>
+		</td>
+		<td>
+		<fieldset><legend>DRaaS Medium</legend>
+			<table>
+			<tr>
+			<td>
+			<label>price:<input id="draasmediumprice" style="width: 4em" type = "number" min="0" max="1000" step="1" value ="106" onchange="run()"></label>
+			</td>
+			<td>
+			<label>quantity:<input id="draasmediumquantity" style="width: 4em" type = "number" min="0" max="1000" step="1" value ="2" onchange="run()"></label>
+			</td>
+			</tr>
+                        <tr>
+                        <td colspan="2">
+                        <label>Growth:<input id="draasmediumgrowth" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"></label>
+                        </td>
+			</tr>
+			</table>	
+		</fieldset>
+		</td>
+		<td>
+		<fieldset><legend>DRaaS Large</legend>
+			<table>
+			<tr>
+			<td>
+			<label>price:<input id="draaslargeprice" style="width: 4em" type = "number" min="0" max="1000" step="1" value="97" onchange="run()"></label>
+			</td>
+			<td>
+			<label>quantity:<input id="draaslargequantity" style="width: 4em" type = "number" min="0" max="1000" step="1" value="1" onchange="run()"></label>
+			</td>
+			</tr>
+                        <tr>
+                        <td colspan="2">
+                        <label>Growth:<input id="draaslargegrowth" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"></label>
+                        </td>
+			</tr>
+			</table>
+		</fieldset>
+		</td>
+		</tr>
+		</table>
+	</fieldset>
+</td>
+<td>
+        <fieldset><legend>HaaS</legend>
+                <table>
+                <tr>
+                <th>
+		<img src="lantern.png" width="20" height="20">
+		</th>
+		<th>
+		<img src="lantern.png" width="30" height="30">
+                </th>
+		<th>
+		<img src="lantern.png" width="40" height="40">
+                </th>
+		</tr>
+                <tr>
+                <td>
+                <fieldset><legend>HaaS Small</legend>
+                        <table>
+			<tr>
+			<td>
+			<label>ram:<input id="haassmallram" style="width: 4em" type = "number" min="2" max="1000" step="2" value="128"></label>
+                        </td>
+			<td>
+			<label>cpu:<input id="haassmallcpu" style="width: 4em" type = "number" min="1" max="4" step="1" value="2"></label><br/>
+                        </td>
+			</tr>
+			<tr>
+			<td>
+			<label>price:<input id="haassmallprice" style="width: 4em" type = "number" min="0" max="5000" step="1" value ="1595" onchange="run()"></label>
+                        </td>
+			<td>
+			<label>quantity:<input id="haassmallquantity" style="width: 4em" type = "number" min="0" max="1000" step="1" value="1" onchange="run()"></label>
+			</td>
+			</tr>
+                        <tr>
+                        <td colspan="2">
+                        <label>Growth:<input id="haassmallgrowth" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"></label>
+                        </td>
+			</tr>
+			</table>
+                </fieldset>
+                </td>
+                <td>
+                <fieldset><legend>HaaS Medium</legend>
+                        <table>
+			<tr>
+			<td>
+			<label>ram:<input id="haasmediumram" style="width: 4em" type = "number" min="2" max="1000" step="2" value = "256"></label>
+                        </td>
+			<td>
+			<label>cpu:<input id="haasmediumcpu" style="width: 4em" type = "number" min="1" max="4" step="1" value="2"></label><br/>
+                        </td>
+			</tr>
+			<tr>
+			<td>
+			<label>price:<input id="haasmediumprice" style="width: 4em" type = "number" min="0" max="5000" step="1" value = "2395" onchange="run()"></label>
+                        </td>
+			<td>
+			<label>quantity:<input id="haasmediumquantity" style="width: 4em" type = "number" min="0" max="1000" step="1" value="1" onchange="run()"></label>
+			</td>
+			</tr>
+                        <tr>
+                        <td colspan="2">
+                        <label>Growth:<input id="haasmediumgrowth" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"></label>
+                        </td>
+			</tr>
+			</table>	
+                </fieldset>
+                </td>
+                <td>
+                <fieldset><legend>HaaS Large</legend>
+                        <table>
+			<tr>
+			<td>
+			<label>ram:<input id="haaslargeram" style="width: 4em" type = "number" min="2" max="1000" step="2" value = "512"></label>
+			</td>
+			<td>
+                        <label>cpu:<input id="haaslargecpu" style="width: 4em" type = "number" min="1" max="4" step="1" value ="2"></label><br/>
+			</td>
+			</tr>
+			<tr>
+			<td>
+                        <label>price:<input id="haaslargeprice" style="width: 4em" type = "number" min="0" max="5000" step="1" value ="3595" onchange="run()"></label>
+			</td>
+			<td>
+                        <label>quantity:<input id="haaslargequantity" style="width: 4em" type = "number" min="0" max="1000" step="1" value="1" onchange="run()"></label>
+			</td>
+			</tr>
+                        <tr>
+                        <td colspan="2">
+                        <label>Growth:<input id="haaslargegrowth" type="range" min="0" max = "100" step = "10" value="20" onchange="run()"></label>
+                        </td>
+			</tr>
+			</table>`
+                </fieldset>
+                </td>
+                </tr>
+		</table>
+        </fieldset>
+</td>
+</table>
+</fieldset>
+
+<fieldset><legend>CAPEX</legend>
+<table>
+<tr>
+<td rowspan="10">
+<canvas id="architecturecanvas" width="150" height="300" style="border:1px dashed #CCC;vertical-align:bottom"></canvas>
+</td>
+<td>
+<input type = "checkbox" id = "series1checkbox" onchange="myRun1()">wanedge
+        <select id="series1Select" onchange="myRun1()">
+                <script>
+                        series1name = ["ASR1001-X", "ASR1002-X", "ASR-1004", "ASR1006", "ASR1001", "ASR1002", "ASR1013", "CISCO1912", "CISCO2901", "CISCO4321", "IR829", "ASR9006", "ASR9904", "CSR10M", "CSR100M", "CSR1GB", "CSR2.5GB", "CSR10GB"];
+                        series1speed = ["2.5-20Gbps", "5-10Gbps", "10-40Gbps", "10-100Gbps", "2.5-10Gbps", "5-10Gbps", "100Gbps", "15Mbps", "25Mbps", "1-2Gbps", "3Gbps", "4Gbps", "5Gbps", "10Mbps", "100Mbps", "1Gbps", "2.5Gbps", "10Gbps"];
+                        series1price = ["1000", "1500", "2000", "2500", "3000", "3500", "4000", "4500", "5000", "5500", "6000", "6500", "7000", "100", "150", "200", "250", "300"];
+                        for (i = 0; i < series1name.length; i++) {
+                                document.write("<option value=" + i + ">" + series1name[i] + ":" + series1speed[i] + ":" + series1price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>gpl: <input id="series1gpl" style="width: 4em" type="number" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series1quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun1()"></label>
+</td>
+<td>
+Discount: <input id="series1discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="myRun1()">
+<input type="text" id="series1disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series1total" style="width: 4em" value="0">
+<script>
+function myRun1() {
+        document.getElementById("series1gpl").value = series1price[document.getElementById("series1Select").value];
+        document.getElementById("series1total").value = series1price[document.getElementById("series1Select").value]*series1quantity.value*(1-series1discount.value/100)*series1checkbox.checked;
+        document.getElementById("series1disp").value = series1discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series2checkbox" onchange="myRun2()">core aggregation
+        <select id="series2Select" onchange="myRun2()">
+                <script>
+                        series2name = ["N3K-C3524P-10GX", "N5K-C5672UP", "N9K-C9372PX", "N3K-C3172PQ-10GE", "N3K-C3064-X-FA-L3", "N3K-C3132Q-40GX", "N5K-C5548UP-FA", "WS-C3850-12XS-S", "WS-C3650-24TD-S", "WS-C2960XR-24TD-I", "N3K-C3524P-10GX", "APIC Test & Dev ACI-C9336-BL-EAL", "APIC production ACI-C9336-B3-EAL"];
+                        series2speed = ["2.5-20Gbps", "5-10Gbps", "10-40Gbps", "10-100Gbps", "2.5-10Gbps", "5-10Gbps", "100Gbps", "15Mbps", "25Mbps", "1-2Gbps", "3Gbps", "4Gbps", "5Gbps"];
+                        series2price = ["14000", "42000", "30500", "28000", "28000", "36000", "40600", "13500", "5800", "5895", "14000", "92312", "147095"];
+                        for (i = 0; i < series2name.length; i++) {
+                                document.write("<option value=" + i + ">" + series2name[i] + ":" + series2speed[i] + ":" + series2price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>gpl: <input id="series2gpl" style="width: 4em" type="number" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series2quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun2()"></label>
+</td>
+<td>
+Discount: <input id="series2discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="myRun2()">
+<input type="text" id="series2disp" style="width: 4em">
+</td>
+<td>
+<input type="number" style="width: 4em" id="series2total" value="0">
+<script>
+function myRun2() {
+        document.getElementById("series2gpl").value = series2price[document.getElementById("series2Select").value];
+        document.getElementById("series2total").value = series2price[document.getElementById("series2Select").value]*series2quantity.value*(1-series2discount.value/100)*series2checkbox.checked;
+        document.getElementById("series2disp").value = series2discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series3checkbox" onchange="myRun3()">firewall
+        <select id="series3Select" onchange="myRun3()">
+                <script>
+                        series3name = ["L-ASAV5-K9", "L-ASAV10S-K9", "L-ASAV30S-K9", "ASA5506-FPWR-BUN", "ASA5508-FPWR-BUN", "ASA5512-FPWR-BUN", "ASA5515-FPWR-BUN", "ASA5516-FPWR-BUN", "ASA5525-FPWR-BUN", "ASA5545-FPWR-BUN", "ASA5555-FPWR-BUN", "ASA5585-S10F10X", "ASA5585-S20F20X", "ASA5585-S40F40-BUN", "ASA5585-S60F60-BUN"];
+                        series3speed = ["100Mbps", "1GB", "2GB", "FW+IPS 750Mbps", "FW+IPS+VDC 1Gbps", "FW+IPS+VDC 1Gbps", "FW+IPS+VDC 1.2Gbps", "FW+IPS+VDC 1.8Gbps", "FW+IPS+VDC 2Gbps", "FW+IPS+VDC 3Gbps", "FW+IPS+VDC 4Gbps", "FW+IPS+VDC 4Gbps", "FW+IPS+VDC 10Gbps", "FW+IPS+VDC 20Gbps", "FW+IPS+VDC 40Gbps"];
+                        series3price = ["3595", "3995", "15980", "2575", "11315", "12240", "12825", "10245", "13545", "24345", "30845", "74995", "114995", "198995", "300495"];
+                        for (i = 0; i < series3name.length; i++) {
+                                document.write("<option value=" + i + ">" + series3name[i] + ":" + series3speed[i] + ":" + series3price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>gpl:<input id="series3gpl" style="width: 4em" type="number" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series3quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun3()"></label>
+</td>
+<td>
+Discount: <input id="series3discount" style="width: 4em"  type="range" min="0" max="100" step="10" value="45" onchange="myRun3()"">
+<input type="text" id="series3disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series3total" style="width: 4em" value="0">
+<script>
+function myRun3() {
+        document.getElementById("series3gpl").value = series3price[document.getElementById("series3Select").value];
+        document.getElementById("series3total").value = series3price[document.getElementById("series3Select").value]*series3quantity.value*(1-series3discount.value/100)*series3checkbox.checked;
+        document.getElementById("series3disp").value = series3discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series4checkbox" onchange="myRun4()">services : virtual router
+        <select id="series4Select" onchange="myRun4()">
+                <script>
+                        series4name = ["L-CSR-10M-IPB-1Y", "L-CSR-10M-APP-1Y", "L-CSR-10M-SEC-1Y", "L-CSR-10M-AX-1Y"];
+                        series4speed = ["10M", "10M", "10M", "10M"];
+                        series4price = ["265", "435", "485", "665"];
+                        for (i = 0; i < series4name.length; i++) {
+                                document.write("<option value=" + i + ">" + series4name[i] + ":" + series4speed[i] + ":" + series4price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>Gpl:<input id="series4gpl" style="width: 4em"  type="number" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series4quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun4()"></label>
+</td>
+<td>
+Discount: <input id="series4discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="onchange="myRun4()">
+<input type="text" id="series4disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series4total" style="width: 4em" value="0">
+<script>
+function myRun4() {
+        document.getElementById("series4gpl").value = series4price[document.getElementById("series4Select").value];
+        document.getElementById("series4total").value = series4price[document.getElementById("series4Select").value]*series4quantity.value*(1-series4discount.value/100)*series4checkbox.checked;
+        document.getElementById("series4disp").value = series4discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series5checkbox" onchange="myRun5()">services : virtual load balancer
+        <select id="series5Select" onchange="myRun5()">
+                <script>
+                        series5name = ["L-NS-1KV-10S", "L-NS-1KV-10E", "L-NS-1KV-10P"];
+                        series5speed = ["standard", "enterprise", "platinum"];
+                        series5price = ["2000", "5000", "8000"];
+                        for (i = 0; i < series5name.length; i++) {
+                                document.write("<option value=" + i + ">" + series5name[i] + ":" + series5speed[i] + ":" + series5price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>Gpl:<input id="series5gpl" style="width: 4em" type="number" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series5quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun5()"></label>
+</td>
+<td>
+Discount: <input id="series5discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="myRun5()">
+<input type="text" id="series5disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series5total" style="width: 4em" value="0">
+<script>
+function myRun5() {
+        document.getElementById("series5gpl").value = series5price[document.getElementById("series5Select").value];
+        document.getElementById("series5total").value = series5price[document.getElementById("series5Select").value]*series5quantity.value*(1-series5discount.value/100)*series5checkbox.checked;
+        document.getElementById("series5disp").value = series5discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series6checkbox" onchange="myRun6()">services : virtual firewall
+        <select id="series6Select" onchange="myRun6()">
+                <script>
+                        series6name = ["L-ASAV5S-K9", "L-ASAV10S-K9", "L-ASAV30S-K9"];
+                        series6speed = ["100MB", "1GB", "2GB"];
+                        series6price = ["3595", "3995", "15890"];
+                        for (i = 0; i < series6name.length; i++) {
+                                document.write("<option value=" + i + ">" + series6name[i] + ":" + series6speed[i] + ":" + series6price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>Gpl:<input id="series6gpl" type="number" style="width: 4em" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series6quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun6()"></label>
+</td>
+<td>
+Discount: <input id="series6discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="myRun6()">
+<input type="text" id="series6disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series6total" style="width: 4em" value="0">
+<script>
+function myRun6() {
+        document.getElementById("series6gpl").value = series6price[document.getElementById("series6Select").value];
+        document.getElementById("series6total").value = series6price[document.getElementById("series6Select").value]*series6quantity.value*(1-series6discount.value/100)*series6checkbox.checked;
+        document.getElementById("series6disp").value = series6discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series7checkbox" onchange="myRun7()">servers
+        <select id="series7Select" onchange="myRun7()">
+                <script>
+                        series7name = ["8-core blade", "10-core blade", "14-core blade", "12-core blade", "6-core blade", "4-core blade", "16-core blade", "18-core rack", "8-core rack", "10-core rack"];
+                        series7speed = ["64GB", "128GB", "256GB", "256GB", "256GB", "256GB", "256GB", "256GB", "128GB", "64GB"];
+                        series7price = ["9562", "13913", "23882", "19282", "21932", "18687", "21642", "28550", "9576", "6000"];
+                        for (i = 0; i < series7name.length; i++) {
+                                document.write("<option value=" + i + ">" + series7name[i] + ":" + series7speed[i] + ":" + series7price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>Gpl:<input id="series7gpl" style="width: 4em" type="number" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series7quantity" style="width: 4em"  type="number" value="1" step="1" onchange="myRun7()"></label>
+</td>
+<td>
+Discount: <input id="series7discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="myRun7()">
+<input type="text" id="series7disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series7total" style="width: 4em" value="0">
+<script>
+function myRun7() {
+        document.getElementById("series7gpl").value = series7price[document.getElementById("series7Select").value];
+        document.getElementById("series7total").value = series7price[document.getElementById("series7Select").value]*series7quantity.value*(1-series7discount.value/100)*series7checkbox.checked;
+        document.getElementById("series7disp").value = series7discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series8checkbox" onchange="myRun8()">virtualization
+        <select id="series8Select" onchange="myRun8()">
+                <script>
+                        series8name = ["vmware vsphere 6 standard", "vmware vsphere 6 enterprise", "vmware vsphere 6 enterprise plus", "redhat enterprise linux", "redhat enterprise linux premium", "windows server 2012 standard", "windows server 2012 datacenter", "windows server 2012 r2 standard", "windows server 2012 r2 datacenter"];
+                        series8speed = ["per CPU", "per CPU", "per CPU", "1-2CPU, 1-2VN", "1-2CPU, 1-2VN Premium", "2CPU, 2VM", "2CPU, unlimited VM", "2CPU, 2VM", "2CPU, unlimited VM"];
+                        series8price = ["2402", "6581", "8005", "1532", "3331", "2444", "14828", "2444", "14828"];
+                        for (i = 0; i < series8name.length; i++) {
+                                document.write("<option value=" + i + ">" + series8name[i] + ":" + series8speed[i] + ":" + series8price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>Gpl:<input id="series8gpl" type="number" style="width: 4em" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series8quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun8()"></label>
+</td>
+<td>
+Discount: <input id="series8discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="myRun8()">
+<input type="text" id="series8disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series8total" style="width: 4em" value="0">
+<script>
+function myRun8() {
+        document.getElementById("series8gpl").value = series8price[document.getElementById("series8Select").value];
+        document.getElementById("series8total").value = series8price[document.getElementById("series8Select").value]*series8quantity.value*(1-series8discount.value/100)*series8checkbox.checked;
+        document.getElementById("series8disp").value = series8discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series9checkbox" onchange="myRun9()">storage
+        <select id="series9Select" onchange="myRun9()">
+                <script>
+                        series9name = ["veeam starter", "veeam medium", "veeam large", "UCS-SEED-C3260", "UCS-SEED-C3260", "UCS-SEED-C3260", "UCS-SEED-C3260", "S3260", "S3260", "S3260", "S3260", "S3260", "S3260", "S3260", "S3260", "S3260", "S3260", "S3260", "S3260", "FI+3xHX220", "FI+3xHX240", "FI+3xHX240", "FI+3xHX240", "VSAN6 4xC240", "VSAN6 4xC240", "VSAN6 4xC220", "metacloud 3 node", "Microsoft Storage Spaces"];
+                        series9speed = ["48TB", "360TB", "1PB", "84TB", "168TB", "252GB", "336TB", "56TB", "84TB", "112TB", "140TB", "168TB", "224TB", "252TB", "280TB", "336TB", "420TB", "448TB", "560TB", "21.6TB", "39.6TB", "54TB", "82.8TB", "58TB", "39TB", "34TB", "3 node metacloud", "12TB"];
+                        series9price = ["36902", "188276", "564830", "67351", "95351", "125351", "90566", "72043", "81543", "90443", "95543", "106843", "123443", "135544", "132544", "158544", "163544", "181544", "191543", "141221", "162542", "176042", "210542", "321408", "279256", "249912", "334400", "27678"];
+                        for (i = 0; i < series9name.length; i++) {
+                                document.write("<option value=" + i + ">" + series9name[i] + ":" + series9speed[i] + ":" + series9price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>Gpl:<input id="series9gpl" style="width: 4em" type="number" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series9quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun9()"></label>
+</td>
+<td>
+Discount: <input id="series9discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="myRun9()">
+<input type="text" id="series9disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series9total" style="width: 4em" value="0">
+<script>
+function myRun9() {
+        document.getElementById("series9gpl").value = series9price[document.getElementById("series9Select").value];
+        document.getElementById("series9total").value = series9price[document.getElementById("series9Select").value]*series9quantity.value*(1-series9discount.value/100)*series9checkbox.checked;
+        document.getElementById("series9disp").value = series9discount.value;
+}
+</script>
+</td>
+</tr>
+<tr>
+<td>
+<input type = "checkbox" id = "series10checkbox" onchange="myRun10()">orchestration
+        <select id="series10Select" onchange="myRun10()">
+                <script>
+                        series10name = ["infrastructure automation", "cloud management", "service management", "big data", "enterprise cloud suite", "ucs director base", "ucs director server based licensing"];
+                        series10speed = ["ucsd base, ecs, ucs central, cimc, performance, vacs", "cloud center, orchestrator, 100VM", "cpo, psc, ecs", "big data", "ucsd base, foundation, ecs", "ucsd base, virtual, bare metal"];
+
+                        series10price = ["2299", "110000", "35100", "315", "10014", "1140", "13110"];
+                        for (i = 0; i < series10name.length; i++) {
+                                document.write("<option value=" + i + ">" + series10name[i] + ":" + series10speed[i] + ":" + series10price[i] + "</option>");
+                        }
+                </script>
+        `</select>
+</td>
+<td>
+<label>Gpl:<input id="series10gpl" style="width: 4em" type="number" value="100"></label>
+</td>
+<td>
+<label>Quantity: <input id="series10quantity" style="width: 4em" type="number" value="1" step="1" onchange="myRun10()"></label>
+</td>
+<td>
+Discount: <input id="series10discount" style="width: 4em" type="range" min="0" max="100" step="10" value="45" onchange="myRun10()">
+<input type="text" id="series10disp" style="width: 4em">
+</td>
+<td>
+<input type="number" id="series10total" style="width: 4em" value="0">
+<script>
+function myRun10() {
+        document.getElementById("series10gpl").value = series10price[document.getElementById("series10Select").value];
+        document.getElementById("series10total").value = series10price[document.getElementById("series10Select").value]*series10quantity.value*(1-series10discount.value/100)*series10checkbox.checked;
+        document.getElementById("series10disp").value = series10discount.value;
+}
+</script>
+</td>
+</tr>
+</table>
+</fieldset>
+<script>
+function myRun() {
+        document.getElementById("series1gpl").value = series1price[document.getElementById("series1Select").value];
+        document.getElementById("series1total").value = series1price[document.getElementById("series1Select").value]*series1quantity.value*(1-series1discount.value/100)*series1checkbox.checked; 
+        document.getElementById("series2gpl").value = series2price[document.getElementById("series2Select").value];
+        document.getElementById("series2total").value = series2price[document.getElementById("series2Select").value]*series2quantity.value*(1-series2discount.value/100)*document.getElementById("series2checkbox").checked; 
+        document.getElementById("series3gpl").value = series3price[document.getElementById("series3Select").value];
+        document.getElementById("series3total").value = series3price[document.getElementById("series3Select").value]*series3quantity.value*(1-series3discount.value/100)*document.getElementById("series3checkbox").checked; 
+document.getElementById("series4gpl").value = series4price[document.getElementById("series4Select").value];
+        document.getElementById("series4total").value = series4price[document.getElementById("series4Select").value]*series4quantity.value*(1-series4discount.value/100)*document.getElementById("series4checkbox").checked;
+document.getElementById("series5gpl").value = series5price[document.getElementById("series5Select").value];
+        document.getElementById("series5total").value = series5price[document.getElementById("series5Select").value]*series5quantity.value*(1-series5discount.value/100)*document.getElementById("series5checkbox").checked;
+document.getElementById("series6gpl").value = series6price[document.getElementById("series6Select").value];
+        document.getElementById("series6total").value = series6price[document.getElementById("series6Select").value]*series6quantity.value*(1-series6discount.value/100)*document.getElementById("series6checkbox").checked;
+document.getElementById("series7gpl").value = series7price[document.getElementById("series7Select").value];
+        document.getElementById("series7total").value = series7price[document.getElementById("series7Select").value]*series7quantity.value*(1-series7discount.value/100)*document.getElementById("series7checkbox").checked;
+document.getElementById("series8gpl").value = series8price[document.getElementById("series8Select").value];
+        document.getElementById("series8total").value = series8price[document.getElementById("series8Select").value]*series8quantity.value*(1-series8discount.value/100)*document.getElementById("series8checkbox").checked;
+document.getElementById("series9gpl").value = series9price[document.getElementById("series9Select").value];
+        document.getElementById("series9total").value = series9price[document.getElementById("series9Select").value]*series9quantity.value*(1-series9discount.value/100)*document.getElementById("series9checkbox").checked;
+document.getElementById("series10gpl").value = series10price[document.getElementById("series10Select").value];
+        document.getElementById("series10total").value = series10price[document.getElementById("series10Select").value];
+}
+</script>
+</form>
+</CENTER>
+</BODY>
+</HTML>
